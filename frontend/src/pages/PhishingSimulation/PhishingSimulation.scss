@@ -1,0 +1,27 @@
+.phishing-simulation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  .page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .status-chip {
+    width: fit-content;
+    margin: auto;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    color: white;
+    text-transform: uppercase;
+
+    &.pending {
+      background-color: #1088f9;
+    }
+    &.clicked {
+      background-color: #4154fb;
+    }
+  }
+}

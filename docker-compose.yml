@@ -1,0 +1,50 @@
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/mongodb
+    restart: always
+    networks:
+      - app-network
+  phishing-simulation:
+    build: ./backend/phishing-simulation
+    ports:
+      - "3001:3000"
+    env_file: ./backend/phishing-simulation/.env
+    depends_on:
+      - mongodb
+    restart: always
+    networks:
+      - app-network
+  phishing-attempt-management:
+    build: ./backend/phishing-attempt-management
+    ports:
+      - "3000:3000"
+    env_file: ./backend/phishing-attempt-management/.env
+    depends_on:
+      - mongodb
+      - phishing-simulation
+    restart: always
+    networks:
+      - app-network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - phishing-attempt-management
+    restart: always
+    networks:
+      - app-network
+volumes:
+  mongodb-data:
+networks:
+  app-network:
